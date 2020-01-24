@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#define VALIDATE 0
 #define SCHEDULE schedule(static)
 
 int dot_prod(const size_t, const int * restrict, const int * restrict);
@@ -27,10 +28,14 @@ int main(int argc, char **argv)
     t0 = omp_get_wtime();
     uv = dot_prod(n,u,v);
     t1 = omp_get_wtime();
+
+#if VALIDATE
     if(!validate_dp(n,u,v,uv)) {
         printf("Validation failed.\n");
         return 1;
     }
+#endif
+
     printf("Total time taken: %f.\n",t1-t0);
 
     free(u);

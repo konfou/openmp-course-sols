@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#define VALIDATE 0
 
 void vector_add(const size_t, const int * restrict, const int * restrict, int * restrict);
 int validate_va(const size_t, const int * restrict, const int * restrict, const int * restrict);
@@ -27,10 +28,14 @@ int main(int argc, char **argv)
     t0 = omp_get_wtime();
     vector_add(n,u,v,w);
     t1 = omp_get_wtime();
+
+#if VALIDATE
     if(!validate_va(n,u,v,w)) {
         printf("Validation failed.\n");
         return 1;
     }
+#endif
+
     printf("Total time taken: %f.\n",t1-t0);
 
     free(u);

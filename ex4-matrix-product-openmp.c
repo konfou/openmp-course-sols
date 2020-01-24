@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#define VALIDATE 0
 
 void mat_prod(const size_t n, const int * restrict, const int * restrict, int * restrict);
 int validate_mp(const size_t n, const int * restrict, const int * restrict, const int * restrict);
@@ -27,10 +28,14 @@ int main(int argc, char **argv)
     t0 = omp_get_wtime();
     mat_prod(n,A,B,C);
     t1 = omp_get_wtime();
+
+#if VALIDATE
     if(!validate_mp(n,A,B,C)) {
         printf("Validation failed.\n");
         return 1;
     }
+#endif
+
     printf("Total time taken: %f.\n",t1-t0);
 
     free(A);

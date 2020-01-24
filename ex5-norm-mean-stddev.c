@@ -3,6 +3,7 @@
 #include <time.h>
 #include <math.h>
 #include <omp.h>
+#define VALIDATE 0
 #define EPS 0.000001
 
 double *normrnd(const size_t, const size_t, const double, const double);
@@ -33,6 +34,8 @@ int main(int argc, char **argv)
     avg = mean(n,n,A);
     stddev = std(n,n,avg,A);
     t1 = omp_get_wtime();
+
+#if VALIDATE
     if(!validate_mm(n,n,A,avg)) {
         printf("Mean value validation failed.\n");
         return 1;
@@ -41,6 +44,8 @@ int main(int argc, char **argv)
         printf("Standard deviation validation failed.\n");
         return 1;
     }
+#endif
+
     printf("Total time taken: %f.\n",t1-t0);
 
     free(A);

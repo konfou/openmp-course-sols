@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#define VALIDATE 0
 
 int max(const size_t n, const int * restrict);
 int validate_mm(const size_t n, const int * restrict, const int);
@@ -26,10 +27,14 @@ int main(int argc, char **argv)
     t0 = omp_get_wtime();
     max_val = max(n,A);
     t1 = omp_get_wtime();
+
+#if VALIDATE
     if(!validate_mm(n,A,max_val)) {
         printf("Validation failed.\n");
         return 1;
     }
+#endif
+
     printf("Total time taken: %f.\n",t1-t0);
 
     free(A);
