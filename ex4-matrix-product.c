@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <omp.h>
 #define VALIDATE 0
+#if VALIDATE
+    #include "validate.h"
+#endif
 
 void mat_prod(const size_t n, const int * restrict, const int * restrict, int * restrict);
-int validate_mp(const size_t n, const int * restrict, const int * restrict, const int * restrict);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -23,14 +25,15 @@ int main(int argc, char **argv)
     A = (int*)malloc(n*n*sizeof(int));
     B = (int*)malloc(n*n*sizeof(int));
     C = (int*)calloc(n*n,sizeof(int));
-    for(i=0; i<n*n; ++i) A[i]=B[i]=i;
+    for(i=0; i<n*n; ++i)
+        A[i]=B[i]=i%100;
 
     t0 = omp_get_wtime();
     mat_prod(n,A,B,C);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_mp(n,A,B,C)) {
+    if(!validate_mat_prod(n,A,B,C)) {
         printf("Validation failed.\n");
         return 1;
     }
@@ -51,23 +54,6 @@ void mat_prod(const size_t n, const int * restrict A, const int * restrict B, in
         for(k=0; k<n; ++k)
             for(j=0; j<n; ++j)
                 C[i*n+j]+=A[i*n+k]*B[k*n+j];
-}
-
-int validate_mp(const size_t n, const int * restrict A, const int * restrict B, const int * restrict C)
-{
-    int *D = (int*)calloc(n*n,sizeof(int));
-    size_t i,j,k;
-    for(i=0; i<n; ++i)
-        for(k=0; k<n; ++k)
-            for(j=0; j<n; ++j)
-                D[i*n+j]+=A[i*n+k]*B[k*n+j];
-    for(i=0; i<n*n; ++i)
-        if(D[i]!=C[i]) {
-            free(D);
-            return 0;
-        }
-    free(D);
-    return 1;
 }
 
 void usage(char **argv)

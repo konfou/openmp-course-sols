@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <omp.h>
 #define VALIDATE 0
+#if VALIDATE
+    #include "validate.h"
+#endif
 
-void vector_add(const size_t, const int * restrict, const int * restrict, int * restrict);
-int validate_va(const size_t, const int * restrict, const int * restrict, const int * restrict);
+void vec_add(const size_t, const int * restrict, const int * restrict, int * restrict);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -23,14 +25,15 @@ int main(int argc, char **argv)
     u = (int*)malloc(n*sizeof(int));
     v = (int*)malloc(n*sizeof(int));
     w = (int*)malloc(n*sizeof(int));
-    for(i=0; i<n; ++i) u[i]=v[i]=i;
+    for(i=0; i<n; ++i)
+        u[i]=v[i]=i;
 
     t0 = omp_get_wtime();
-    vector_add(n,u,v,w);
+    vec_add(n,u,v,w);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_va(n,u,v,w)) {
+    if(!validate_vec_add(n,u,v,w)) {
         printf("Validation failed.\n");
         return 1;
     }
@@ -44,17 +47,11 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void vector_add(const size_t n, const int * restrict u, const int * restrict v, int * restrict w)
+void vec_add(const size_t n, const int * restrict u, const int * restrict v, int * restrict w)
 {
     size_t i;
-    for(i=0; i<n; ++i) w[i]=u[i]+v[i];
-}
-
-int validate_va(const size_t n, const int * restrict u, const int * restrict v, const int * restrict w)
-{
-    for(size_t i=0; i<n; ++i)
-        if(w[i]!=u[i]+v[i]) return 0;
-    return 1;
+    for(i=0; i<n; ++i)
+        w[i]=u[i]+v[i];
 }
 
 void usage(char **argv)

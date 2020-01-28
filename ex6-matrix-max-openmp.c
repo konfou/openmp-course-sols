@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <omp.h>
 #define VALIDATE 0
+#if VALIDATE
+    #include "validate.h"
+#endif
 
 int max(const size_t n, const int * restrict);
-int validate_mm(const size_t n, const int * restrict, const int);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -20,21 +22,25 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    srand(42); // The Answer
+
     A = (int*)malloc(n*n*sizeof(int));
     for(i=0; i<n; ++i)
-        for(j=0; j<n; ++j) A[i*n+j]=i*n+j;
+        for(j=0; j<n; ++j)
+            A[i*n+j]=rand();
 
     t0 = omp_get_wtime();
     max_val = max(n,A);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_mm(n,A,max_val)) {
+    if(!validate_max(n,A,max_val)) {
         printf("Validation failed.\n");
         return 1;
     }
 #endif
 
+    printf("max(A) = %d\n",max_val);
     printf("Total time taken: %f.\n",t1-t0);
 
     free(A);
@@ -43,28 +49,17 @@ int main(int argc, char **argv)
 
 int max(const size_t n, const int * restrict A)
 {
-    size_t i,j;
     int max_val=A[0];
+    size_t i,j;
     #pragma omp parallel for default(none) shared(max_val,A) private(i,j)
     for(i=0; i<n; ++i)
         for(j=0; j<n; ++j)
-            if(A[i*n+j]>max_val) {
-                #pragma omp critical
-                {
-                    max_val=A[i*n+j];
-                }
+            if(A[i*n+j]>max_val)
+            #pragma omp critical
+            {
+                max_val=A[i*n+j];
             }
     return max_val;
-}
-
-int validate_mm(const size_t n, const int * restrict A, const int max_val)
-{
-    size_t i,j;
-    int tmax=A[0];
-    for(i=0; i<n; ++i)
-        for(j=0; j<n; ++j)
-            if(A[i*n+j]>tmax) tmax=A[i*n+j];
-    return (max_val!=tmax) ? 0 : 1;
 }
 
 void usage(char **argv)

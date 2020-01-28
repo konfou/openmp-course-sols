@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS=-O2 -lm -fopenmp
+CFLAGS=-O2 -lm -fopenmp -Wall -Wextra -pedantic
 
-SRCS=$(wildcard *.c)
+SRCS=$(wildcard ex*.c)
 PROGS=$(SRCS:.c=)
 
 .PHONY: all, clean
@@ -12,4 +12,5 @@ all: $(PROGS)
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm $(PROGS)
+	$(RM) a.out
+	$(RM) $(PROGS)

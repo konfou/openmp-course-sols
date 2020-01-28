@@ -11,8 +11,8 @@ struct Opts
 
 void init_rho(double * restrict, const struct Opts);
 void jacobi(double * restrict, const double * restrict, const struct Opts);
-double residuals(const double * restrict, const double * restrict, const struct Opts);
-void output(const double * restrict, const double * restrict, const struct Opts);
+double residual(const double * restrict, const double * restrict, const struct Opts);
+void output(const double * restrict, const double * restrict, const size_t);
 
 static inline double rhox(const double x)
 {
@@ -29,7 +29,7 @@ int main(void)
     o.b = 1.0;
     o.ua = 0.0;
     o.ub = 0.0;
-    o.dx = 0.000001;
+    o.dx = 0.00001;
     o.its = 200000;
     o.tol = 0.00001;
 
@@ -49,7 +49,7 @@ int main(void)
 
     printf("Total time taken: %f.\n",t1-t0);
 
-    output(u,rho,o);
+    output(u,rho,o.n);
     free(u);
     free(rho);
     return 0;
@@ -58,7 +58,8 @@ int main(void)
 void init_rho(double * restrict rho, const struct Opts o)
 {
     size_t i;
-    for(i=0; i<o.n; ++i) rho[i]=rhox(i*o.dx);
+    for(i=0; i<o.n; ++i)
+        rho[i]=rhox(i*o.dx);
 }
 
 void jacobi(double * restrict u, const double * restrict rho, const struct Opts o)
@@ -70,16 +71,16 @@ void jacobi(double * restrict u, const double * restrict rho, const struct Opts 
             u0[j] = u[j];
         for(j=1; j<o.n-1; ++j)
             u[j] = 0.5*(u0[j-1]+u0[j+1]+o.dx*o.dx*rho[j]);
-        if(residuals(u,rho,o)<=o.tol)
+        if(residual(u,rho,o)<=o.tol)
             break;
     }
     free(u0);
 }
 
-double residuals(const double * restrict u, const double * restrict rho, const struct Opts o)
+double residual(const double * restrict u, const double * restrict rho, const struct Opts o)
 {
-    size_t j;
     double eqn,res=0;
+    size_t j;
     for(j=1; j<o.n-1; ++j) {
         eqn = u[j-1]-2*u[j]+u[j+1]+o.dx*o.dx*rho[j];
         res += sqrt(eqn*eqn);
@@ -87,11 +88,10 @@ double residuals(const double * restrict u, const double * restrict rho, const s
     return res;
 }
 
-void output(const double * restrict u, const double * restrict rho, const struct Opts o)
+void output(const double * restrict u, const double * restrict rho, const size_t n)
 {
-    size_t i;
     FILE *file = fopen("poisson_output.dat","w");
-    for(i=0; i<o.n; ++i)
+    for(size_t i=0; i<n; ++i)
         fprintf(file,"%ld\t%e\t%f\n",i,u[i],rho[i]);
     fclose(file);
 }
