@@ -1,4 +1,5 @@
 ## OpenMP Course Exercises Solutions
 
-The following are solutions to the exercises found in OpenMP introductory slides from N. Trifonidis,
-used during the OpenMP course from Prof. N. Stergioulas.
+Solutions to the exercises found in OpenMP introductory slides from N. Trifonidis,
+used during the OpenMP course in MSc Computational Physics at AUTh,
+and the exercises set given by N. Stergioulas.
