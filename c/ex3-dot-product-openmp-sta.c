@@ -48,8 +48,8 @@ int main(int argc, char **argv)
 
 int dot_prod(const size_t n, const int * restrict u, const int * restrict v)
 {
-    int sum=0;
-    int *sums = (int*)calloc(n,sizeof(int));
+    int sum=0,nt=omp_get_max_threads();
+    int *sums = (int*)calloc(nt,sizeof(int));
     size_t i;
     #pragma omp parallel default(none) shared(sums,u,v) private(i)
     {
@@ -58,7 +58,7 @@ int dot_prod(const size_t n, const int * restrict u, const int * restrict v)
         for(i=0; i<n; ++i)
             sums[j] += u[i]+v[i];
     }
-    for(i=0; i<n; ++i)
+    for(i=0; i<nt; ++i)
         sum += sums[i];
     free(sums);
     return sum;

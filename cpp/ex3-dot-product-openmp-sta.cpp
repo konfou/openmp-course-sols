@@ -47,8 +47,8 @@ int main(int argc, char **argv)
 
 int dot_prod(const size_t n, const std::vector<int>& u, const std::vector<int>& v)
 {
-    int sum=0;
-    std::vector<int> sums(n);
+    int sum=0,nt=omp_get_max_threads();
+    std::vector<int> sums(nt);
     size_t i;
     #pragma omp parallel default(none) shared(sums,u,v) private(i)
     {
@@ -57,7 +57,7 @@ int dot_prod(const size_t n, const std::vector<int>& u, const std::vector<int>& 
         for(i=0; i<n; ++i)
             sums[j] += u[i]+v[i];
     }
-    for(i=0; i<n; ++i)
+    for(i=0; i<nt; ++i)
         sum += sums[i];
     return sum;
 }
