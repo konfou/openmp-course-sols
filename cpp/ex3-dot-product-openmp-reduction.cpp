@@ -50,7 +50,7 @@ int dot_prod(const size_t n, const std::vector<int>& u, const std::vector<int>& 
     int sum=0;
     size_t i;
     #pragma omp parallel for \
-                    default(none) shared(u,v) private(i) reduction(+:sum)
+                    default(none) shared(n,u,v) private(i) reduction(+:sum)
     for(i=0; i<n; ++i)
         sum += u[i]+v[i];
     return sum;

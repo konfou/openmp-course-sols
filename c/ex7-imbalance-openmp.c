@@ -74,7 +74,7 @@ void iterate(const size_t n, const double * restrict b, const double * restrict 
     size_t i,j,k;
     omp_set_nested(0);  //protect against data races
     #pragma omp parallel for schedule(runtime) \
-                    default(none) shared(a,s,b) private(i,j,k)
+                    default(none) shared(n,b,s,a) private(i,j,k)
     for(i=0; i<n; ++i)
         for(j=1; j<s[i]; ++j)
             for(k=1; k<j; ++k)

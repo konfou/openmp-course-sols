@@ -51,7 +51,7 @@ void vec_add(const size_t n, const int * restrict u, const int * restrict v, int
 {
     int id,nt;
     size_t i,is,ie;
-    #pragma omp parallel default(none) shared(u,v,w) private(i,is,ie,id,nt)
+    #pragma omp parallel default(none) shared(n,u,v,w) private(i,is,ie,id,nt)
     {
         id = omp_get_thread_num();
         nt = omp_get_num_threads();

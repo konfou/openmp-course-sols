@@ -71,7 +71,7 @@ double mean(const size_t n, const size_t m, const std::vector<double>& A)
 {
     double sum=0;
     size_t i;
-    #pragma omp parallel for default(none) shared(A) private(i) reduction(+:sum)
+    #pragma omp parallel for default(none) shared(n,m,A) private(i) reduction(+:sum)
     for(i=0; i<n*m; ++i)
         sum += A[i];
     return sum/(n*m);
@@ -81,7 +81,7 @@ double stddev(const size_t n, const size_t m, const double avg, const std::vecto
 {
     double sum=0;
     size_t i;
-    #pragma omp parallel for default(none) shared(A) private(i) reduction(+:sum)
+    #pragma omp parallel for default(none) shared(n,m,avg,A) private(i) reduction(+:sum)
     for(i=0; i<n*m; ++i)
         sum += (A[i]-avg)*(A[i]-avg);
     return sqrt(sum/(n*m-1));

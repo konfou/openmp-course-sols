@@ -51,7 +51,7 @@ int max(const size_t n, const int * restrict A)
 {
     int max_val=A[0];
     size_t i,j;
-    #pragma omp parallel for default(none) shared(max_val,A) private(i,j)
+    #pragma omp parallel for default(none) shared(max_val,n,A) private(i,j)
     for(i=0; i<n; ++i)
         for(j=0; j<n; ++j)
             if(A[i*n+j]>max_val)

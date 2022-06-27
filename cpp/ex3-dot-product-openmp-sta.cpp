@@ -50,14 +50,14 @@ int dot_prod(const size_t n, const std::vector<int>& u, const std::vector<int>& 
     int sum=0,nt=omp_get_max_threads();
     std::vector<int> sums(nt);
     size_t i;
-    #pragma omp parallel default(none) shared(sums,u,v) private(i)
+    #pragma omp parallel default(none) shared(sums,n,u,v) private(i)
     {
         int j = omp_get_thread_num();
         #pragma omp for
         for(i=0; i<n; ++i)
             sums[j] += u[i]+v[i];
     }
-    for(i=0; i<nt; ++i)
+    for(i=0; i<(size_t)nt; ++i)
         sum += sums[i];
     return sum;
 }

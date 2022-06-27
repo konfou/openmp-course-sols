@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 void mat_prod(const size_t n, const std::vector<int>& A, const std::vector<int>& B, std::vector<int>& C)
 {
     size_t i,j,k;
-    #pragma omp parallel for default(none) shared(A,B,C) private(i,j,k)
+    #pragma omp parallel for default(none) shared(n,A,B,C) private(i,j,k)
     for(i=0; i<n; ++i)
         for(k=0; k<n; ++k)
             for(j=0; j<n; ++j)

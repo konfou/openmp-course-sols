@@ -58,7 +58,7 @@ int main(void)
 void init_rho(double * restrict rho, const struct Opts o)
 {
     size_t i;
-    #pragma omp parallel for default(none) shared(rho) private(i)
+    #pragma omp parallel for default(none) shared(rho,o) private(i)
     for(i=0; i<o.n; ++i)
         rho[i]=rhox(i*o.dx);
 }
@@ -68,10 +68,10 @@ void jacobi(double * restrict u, const double * restrict rho, const struct Opts 
     double * u0 = malloc(o.n*sizeof(double));
     size_t i,j;
     for(i=0; i<o.its; ++i) {
-        #pragma omp parallel for default(none) shared(u,u0) private(j)
+        #pragma omp parallel for default(none) shared(u0,u,o) private(j)
         for(j=0; j<o.n; ++j)
             u0[j] = u[j];
-        #pragma omp parallel for default(none) shared(u,u0,rho) private(j)
+        #pragma omp parallel for default(none) shared(u0,u,rho,o) private(j)
         for(j=1; j<o.n-1; ++j)
             u[j] = 0.5*(u0[j-1]+u0[j+1]+o.dx*o.dx*rho[j]);
         if(residual(u,rho,o)<=o.tol)
@@ -85,7 +85,7 @@ double residual(const double * restrict u, const double * restrict rho, const st
     double eqn,res=0;
     size_t j;
     #pragma omp parallel for \
-                    default(none) shared(u,rho) private(j,eqn) reduction(+:res)
+                    default(none) shared(u,rho,o) private(j,eqn) reduction(+:res)
     for(j=1; j<o.n-1; ++j) {
         eqn = u[j-1]-2*u[j]+u[j+1]+o.dx*o.dx*rho[j];
         res += sqrt(eqn*eqn);

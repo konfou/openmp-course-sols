@@ -51,7 +51,7 @@ void vec_add(const size_t n, const int * restrict u, const int * restrict v, int
 {
     size_t i;
     #pragma omp parallel for schedule(runtime) \
-                    default(none) shared(u,v,w) private(i)
+                    default(none) shared(n,u,v,w) private(i)
     for(i=0; i<n; ++i)
         w[i]=u[i]+v[i];
 }

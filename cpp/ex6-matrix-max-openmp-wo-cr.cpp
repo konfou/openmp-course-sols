@@ -51,7 +51,7 @@ int max(const size_t n, const std::vector<int>& A)
 {
     int max_val=A[0];
     size_t i,j;
-    #pragma omp parallel for default(none) shared(A) private(i,j) reduction(max:max_val)
+    #pragma omp parallel for default(none) shared(n,A) private(i,j) reduction(max:max_val)
     for(i=0; i<n; ++i)
         for(j=0; j<n; ++j)
             if(A[i*n+j]>max_val)
