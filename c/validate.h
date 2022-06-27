@@ -24,6 +24,6 @@ int validate_mean(const size_t, const size_t, const double * restrict, const dou
 int validate_std(const size_t, const size_t, const double, const double * restrict, const double);
 
 //  ex6-matrix-max
-int validate_max(const size_t, const int * restrict, const int);
+int validate_max(const size_t, const size_t, const int * restrict, const int);
 
 #endif

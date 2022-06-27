@@ -7,7 +7,7 @@
     #include "validate.h"
 #endif
 
-void mat_prod(const size_t n, const std::vector<int>&, const std::vector<int>&, std::vector<int>&);
+void mat_prod(const size_t, const std::vector<int>&, const std::vector<int>&, std::vector<int>&);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -23,8 +23,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    A.reserve(n*n);
-    B.reserve(n*n);
+    A.resize(n*n);
+    B.resize(n*n);
     C.resize(n*n);
     for(i=0; i<n*n; ++i)
         A[i]=B[i]=i%100;

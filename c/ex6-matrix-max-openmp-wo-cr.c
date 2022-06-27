@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
-#define VALIDATE 0
+#define VALIDATE 1
 #if VALIDATE
     #include "validate.h"
 #endif
 
-int max(const size_t n, const int * restrict);
+int max(const size_t, const size_t, const int * restrict);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -30,11 +30,11 @@ int main(int argc, char **argv)
             A[i*n+j]=rand();
 
     t0 = omp_get_wtime();
-    max_val = max(n,A);
+    max_val = max(n,n,A);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_max(n,A,max_val)) {
+    if(!validate_max(n,n,A,max_val)) {
         printf("Validation failed.\n");
         return 1;
     }
@@ -47,13 +47,13 @@ int main(int argc, char **argv)
     return 0;
 }
 
-int max(const size_t n, const int * restrict A)
+int max(const size_t n, const size_t m, const int * restrict A)
 {
     int max_val=A[0];
     size_t i,j;
-    #pragma omp parallel for default(none) shared(n,A) private(i,j) reduction(max:max_val)
+    #pragma omp parallel for default(none) shared(n,m,A) private(i,j) reduction(max:max_val)
     for(i=0; i<n; ++i)
-        for(j=0; j<n; ++j)
+        for(j=0; j<m; ++j)
             if(A[i*n+j]>max_val)
                 max_val=A[i*n+j];
     return max_val;

@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <cmath>
+#include <vector>
 
 #ifndef VALIDATE_H
 #define VALIDATE_H
@@ -11,19 +12,19 @@
  */
 
 //  ex1/2-vector-addition
-int validate_vec_add(const size_t n, const std::vector<int>& u, const std::vector<int>& v, const std::vector<int>& w)
+int validate_vec_add(const std::vector<int>& u, const std::vector<int>& v, const std::vector<int>& w);
 
 //  ex3-dot-product
-int validate_dot_prod(const size_t n, const std::vector<int>& u, const std::vector<int>& v, const int uv)
+int validate_dot_prod(const std::vector<int>& u, const std::vector<int>& v, const int uv);
 
 //  ex4-matrix-product
-int validate_mat_prod(const size_t n, const std::vector<int>& A, const std::vector<int>& B, const std::vector<int>& C)
+int validate_mat_prod(const size_t, const std::vector<int>& A, const std::vector<int>& B, const std::vector<int>& C);
 
 //  ex5-norm-mean-stddev
-int validate_mean(const size_t n, const size_t m, const std::vector<double>& A, const double a)
-int validate_std(const size_t n, const size_t m, const double mean, const std::vector<double>& A, const double s)
+int validate_mean(const std::vector<double>& A, const double a);
+int validate_std(const double mean, const std::vector<double>& A, const double s);
 
 //  ex6-matrix-max
-int validate_max(const size_t n, const std::vector<int>& A, const int max_val)
+int validate_max(const size_t n, const size_t m, const std::vector<int>& A, const int max_val);
 
 #endif

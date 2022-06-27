@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 
     srand(33); // Based on Pythagoras
 
-    s.reserve(n);
+    s.resize(n);
     a.resize(n);
 
     b = rand_vec(n);
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     iterate(n,b,s,a);
     t1 = omp_get_wtime();
 
-    printf("Total time taken: %f.\n",t1-t0);
+    std::cout << "Total time taken: " << t1-t0 << ".\n";
 
 #if VALIDATE
     double sum=0;
@@ -50,7 +50,6 @@ int main(int argc, char **argv)
     std::cout << "Sum: " << sum << std::endl;
 #endif
 
-    std::cout << "Total time taken: " << t1-t0 << ".\n";
     return 0;
 }
 

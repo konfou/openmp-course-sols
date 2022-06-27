@@ -37,7 +37,7 @@ int main(void)
 
     o.n = (int)(fabs(o.b-o.a)/o.dx);
     u.resize(o.n);
-    rho.reserve(o.n);
+    rho.resize(o.n);
 
     u[0] = o.ua;
     u[o.n-1] = o.ub;
@@ -94,7 +94,7 @@ double residual(const std::vector<double>& u, const std::vector<double>& rho, co
 
 void output(const std::vector<double>& u, const std::vector<double>& rho, const size_t n)
 {
-    std::ofstream file("poisson_output.dat");
+    std::ofstream file("poisson_output_omp.dat");
     for(size_t i=0; i<n; ++i)
         file << i << "\t" << u[i] << "\t" << rho[i] << '\n';
 }

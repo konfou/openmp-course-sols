@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O2 -lm -fopenmp -Wall -Wextra -pedantic
+CFLAGS=-lm -fopenmp -Wall -Wextra -pedantic
 
 SRCS=$(wildcard ex*.c)
 PROGS=$(SRCS:.c=)
@@ -9,8 +9,8 @@ PROGS=$(SRCS:.c=)
 all: $(PROGS)
 
 %: %.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $< validate.c
 
 clean:
-	$(RM) a.out
+	$(RM) *dat
 	$(RM) $(PROGS)

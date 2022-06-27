@@ -95,7 +95,7 @@ double residual(const double * restrict u, const double * restrict rho, const st
 
 void output(const double * restrict u, const double * restrict rho, const size_t n)
 {
-    FILE *file = fopen("poisson_output.dat","w");
+    FILE *file = fopen("poisson_output_omp.dat","w");
     for(size_t i=0; i<n; ++i)
         fprintf(file,"%ld\t%e\t%f\n",i,u[i],rho[i]);
     fclose(file);

@@ -7,7 +7,7 @@
     #include "validate.h"
 #endif
 
-void vec_add(const size_t, const std::vector<int>&, const std::vector<int>&, std::vector<int>&);
+void vec_add(const std::vector<int>&, const std::vector<int>&, std::vector<int>&);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -23,14 +23,14 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    u.reserve(n);
-    v.reserve(n);
-    w.reserve(n);
+    u.resize(n);
+    v.resize(n);
+    w.resize(n);
     for(i=0; i<n; ++i)
         u[i]=v[i]=i;
 
     t0 = omp_get_wtime();
-    vec_add(n,u,v,w);
+    vec_add(u,v,w);
     t1 = omp_get_wtime();
 
 #if VALIDATE
@@ -44,10 +44,10 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void vec_add(const size_t n, const std::vector<int>& u, const std::vector<int>& v, std::vector<int>& w)
+void vec_add(const std::vector<int>& u, const std::vector<int>& v, std::vector<int>& w)
 {
     int id,nt;
-    size_t i,is,ie;
+    size_t i,is,ie,n=w.size();;
     #pragma omp parallel default(none) shared(n,u,v,w) private(i,is,ie,id,nt)
     {
         id = omp_get_thread_num();

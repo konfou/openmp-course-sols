@@ -3,7 +3,7 @@
 #include <time.h>
 #include <math.h>
 #include <omp.h>
-#define VALIDATE 0
+#define VALIDATE 1
 #if VALIDATE
     #include "validate.h"
 #endif

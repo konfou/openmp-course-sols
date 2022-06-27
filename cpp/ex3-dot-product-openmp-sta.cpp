@@ -7,7 +7,7 @@
     #include "validate.h"
 #endif
 
-int dot_prod(const size_t, const std::vector<int>&, const std::vector<int>&);
+int dot_prod(const std::vector<int>&, const std::vector<int>&);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -24,17 +24,17 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    v.reserve(n);
-    u.reserve(n);
+    u.resize(n);
+    v.resize(n);
     for(i=0; i<n; ++i)
         u[i]=v[i]=i;
 
     t0 = omp_get_wtime();
-    uv = dot_prod(n,u,v);
+    uv = dot_prod(u,v);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_dot_prod(n,u,v,uv)) {
+    if(!validate_dot_prod(u,v,uv)) {
         std::cout << "Validation failed.\n";
         return 1;
     }
@@ -45,11 +45,11 @@ int main(int argc, char **argv)
     return 0;
 }
 
-int dot_prod(const size_t n, const std::vector<int>& u, const std::vector<int>& v)
+int dot_prod(const std::vector<int>& u, const std::vector<int>& v)
 {
     int sum=0,nt=omp_get_max_threads();
     std::vector<int> sums(nt);
-    size_t i;
+    size_t i,n=u.size();
     #pragma omp parallel default(none) shared(sums,n,u,v) private(i)
     {
         int j = omp_get_thread_num();

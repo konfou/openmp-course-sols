@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
-#define VALIDATE 0
+#define VALIDATE 1
 #if VALIDATE
     #include "validate.h"
 #endif

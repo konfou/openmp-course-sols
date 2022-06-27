@@ -37,7 +37,7 @@ int main(void)
 
     o.n = (int)(fabs(o.b-o.a)/o.dx);
     u.resize(o.n);
-    rho.reserve(o.n);
+    rho.resize(o.n);
 
     u[0] = o.ua;
     u[o.n-1] = o.ub;

@@ -10,8 +10,8 @@
 #endif
 
 std::vector<double> normrnd(const size_t, const size_t, const double, const double);
-double mean(const size_t, const size_t, const std::vector<double>&);
-double stddev(const size_t, const size_t, const double, const std::vector<double>&);
+double mean(const std::vector<double>&);
+double stddev(const double, const std::vector<double>&);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -33,16 +33,16 @@ int main(int argc, char **argv)
     A = normrnd(n,n,0,1); /* standard normal distribution: (mu,sigma)=(0,1) */
 
     t0 = omp_get_wtime();
-    avgA = mean(n,n,A);
-    stdA = stddev(n,n,avgA,A);
+    avgA = mean(A);
+    stdA = stddev(avgA,A);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_mean(n,n,A,avgA)) {
+    if(!validate_mean(A,avgA)) {
         std::cout << "Mean value validation failed.\n";
         return 1;
     }
-    if(!validate_std(n,n,avg,A,stdA)) {
+    if(!validate_std(avgA,A,stdA)) {
         std::cout << "Standard deviation validation failed.\n";
         return 1;
     }
@@ -67,24 +67,24 @@ std::vector<double> normrnd(const size_t n, const size_t m, const double mu, con
     return A;
 }
 
-double mean(const size_t n, const size_t m, const std::vector<double>& A)
+double mean(const std::vector<double>& A)
 {
     double sum=0;
-    size_t i;
-    #pragma omp parallel for default(none) shared(n,m,A) private(i) reduction(+:sum)
-    for(i=0; i<n*m; ++i)
+    size_t i,len=A.size();
+    #pragma omp parallel for default(none) shared(len,A) private(i) reduction(+:sum)
+    for(i=0; i<len; ++i)
         sum += A[i];
-    return sum/(n*m);
+    return sum/len;
 }
 
-double stddev(const size_t n, const size_t m, const double avg, const std::vector<double>& A)
+double stddev(const double avg, const std::vector<double>& A)
 {
     double sum=0;
-    size_t i;
-    #pragma omp parallel for default(none) shared(n,m,avg,A) private(i) reduction(+:sum)
-    for(i=0; i<n*m; ++i)
+    size_t i,len=A.size();
+    #pragma omp parallel for default(none) shared(len,avg,A) private(i) reduction(+:sum)
+    for(i=0; i<len; ++i)
         sum += (A[i]-avg)*(A[i]-avg);
-    return sqrt(sum/(n*m-1));
+    return sqrt(sum/(len-1));
 }
 
 void usage(char **argv)

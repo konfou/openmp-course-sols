@@ -1,5 +1,5 @@
 #include "validate.h"
-#define VALIDATETION_EPS 0.000001
+#define VALIDATION_EPS 0.000001
 
 int validate_vec_add(const size_t n, const int * restrict u, const int * restrict v, const int * restrict w)
 {
@@ -46,14 +46,14 @@ int validate_std(const size_t n, const size_t m, const double mean, const double
     double sum=0;
     for(size_t i=0; i<n*m; ++i)
         sum += (A[i]-mean)*(A[i]-mean);
-    return (fabs(s-sqrt(sum/(n-1)))>VALIDATION_EPS) ? 0 : 1;
+    return (fabs(s-sqrt(sum/(n*m-1)))>VALIDATION_EPS) ? 0 : 1;
 }
 
-int validate_max(const size_t n, const int * restrict A, const int max_val)
+int validate_max(const size_t n, const size_t m, const int * restrict A, const int max_val)
 {
     int tmax=A[0];
     for(size_t i=0; i<n; ++i)
-        for(size_t j=0; j<n; ++j)
+        for(size_t j=0; j<m; ++j)
             if(A[i*n+j]>tmax)
                 tmax=A[i*n+j];
     return (max_val!=tmax) ? 0 : 1;

@@ -7,7 +7,7 @@
     #include "validate.h"
 #endif
 
-int max(const size_t n, const std::vector<int>&);
+int max(const size_t, const size_t, const std::vector<int>&);
 void usage(char**);
 
 int main(int argc, char **argv)
@@ -26,17 +26,17 @@ int main(int argc, char **argv)
 
     srand(42); // The Answer
 
-    A.reserve(n*n);
+    A.resize(n*n);
     for(i=0; i<n; ++i)
         for(j=0; j<n; ++j)
             A[i*n+j]=rand();
 
     t0 = omp_get_wtime();
-    max_val = max(n,A);
+    max_val = max(n,n,A);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if(!validate_max(n,A,max_val)) {
+    if(!validate_max(n,n,A,max_val)) {
         std::cout << "Validation failed.\n";
         return 1;
     }
@@ -47,15 +47,15 @@ int main(int argc, char **argv)
     return 0;
 }
 
-int max(const size_t n, const std::vector<int>& A)
+int max(const size_t n, const size_t m, const std::vector<int>& A)
 {
     int max_val=A[0];
     size_t i,j;
-    #pragma omp parallel for default(none) shared(max_val,n,A) private(i,j)
+    #pragma omp parallel for default(none) shared(max_val,n,m,A) private(i,j)
     for(i=0; i<n; ++i)
-        for(j=0; j<n; ++j)
-            if(A[i*n+j]>max_val)
+        for(j=0; j<m; ++j)
             #pragma omp critical
+            if(A[i*n+j]>max_val)
             {
                 max_val=A[i*n+j];
             }
