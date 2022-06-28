@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
     #pragma omp parallel default(none) \
                          private(i,j) \
-                         shared(p,t,x,y,un,u,uo,file_n,file_a)
+                         shared(p,t,tp,x,y,un,u,uo,file_n,file_a)
     {
         #pragma omp for nowait
         for(i=0; i<Nx; ++i)
