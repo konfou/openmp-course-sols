@@ -11,19 +11,25 @@
  */
 
 //  ex1/2-vector-addition
-int validate_vec_add(const size_t, const int * restrict, const int * restrict, const int * restrict);
+int validate_vec_add(const size_t, const int *restrict,
+                     const int *restrict, const int *restrict);
 
 //  ex3-dot-product
-int validate_dot_prod(const size_t, const int * restrict, const int * restrict, const int);
+int validate_dot_prod(const size_t, const int *restrict,
+                      const int *restrict, const int);
 
 //  ex4-matrix-product
-int validate_mat_prod(const size_t, const int * restrict, const int * restrict, const int * restrict);
+int validate_mat_prod(const size_t, const int *restrict,
+                      const int *restrict, const int *restrict);
 
 //  ex5-norm-mean-stddev
-int validate_mean(const size_t, const size_t, const double * restrict, const double);
-int validate_std(const size_t, const size_t, const double, const double * restrict, const double);
+int validate_mean(const size_t, const size_t, const double *restrict,
+                  const double);
+int validate_std(const size_t, const size_t, const double,
+                 const double *restrict, const double);
 
 //  ex6-matrix-max
-int validate_max(const size_t, const size_t, const int * restrict, const int);
+int validate_max(const size_t, const size_t, const int *restrict,
+                 const int);
 
 #endif
