@@ -6,7 +6,7 @@
 #include "validate.h"
 #endif
 
-void mat_prod(const size_t n, const int *restrict, const int *restrict,
+void mat_mult(const size_t n, const int *restrict, const int *restrict,
               int *restrict);
 void usage(char **);
 
@@ -30,11 +30,11 @@ int main(int argc, char **argv)
         A[i] = B[i] = i % 100;
 
     t0 = omp_get_wtime();
-    mat_prod(n, A, B, C);
+    mat_mult(n, A, B, C);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if (!validate_mat_prod(n, A, B, C)) {
+    if (!validate_mat_mult(n, A, B, C)) {
         printf("Validation failed.\n");
         return 1;
     }
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void mat_prod(const size_t n, const int *restrict A, const int *restrict B,
+void mat_mult(const size_t n, const int *restrict A, const int *restrict B,
               int *restrict C)
 {
     size_t i, j, k;

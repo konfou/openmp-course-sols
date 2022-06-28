@@ -21,7 +21,7 @@ int validate_dot_prod(const std::vector<int>& u,
                       const std::vector<int>& v, const int uv);
 
 //  ex4-matrix-product
-int validate_mat_prod(const size_t, const std::vector <int>& A,
+int validate_mat_mult(const size_t, const std::vector <int>& A,
                       const std::vector<int>& B,
                       const std::vector<int>& C);
 

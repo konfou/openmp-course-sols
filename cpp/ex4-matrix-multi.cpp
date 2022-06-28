@@ -7,7 +7,7 @@
 #include "validate.h"
 #endif
 
-void mat_prod(const size_t, const std::vector<int>&,
+void mat_mult(const size_t, const std::vector<int>&,
               const std::vector<int>&, std::vector<int>&);
 void usage(char **);
 
@@ -31,11 +31,11 @@ int main(int argc, char **argv)
         A[i] = B[i] = i % 100;
 
     t0 = omp_get_wtime();
-    mat_prod(n, A, B, C);
+    mat_mult(n, A, B, C);
     t1 = omp_get_wtime();
 
 #if VALIDATE
-    if (!validate_mat_prod(n, A, B, C)) {
+    if (!validate_mat_mult(n, A, B, C)) {
         std::cout << "Validation failed.\n";
         return 1;
     }
@@ -45,11 +45,10 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void mat_prod(const size_t n, const std::vector<int>& A,
+void mat_mult(const size_t n, const std::vector<int>& A,
               const std::vector<int>& B, std::vector<int>& C)
 {
     size_t i, j, k;
-    #pragma omp parallel for default(none) shared(n,A,B,C) private(i,j,k)
     for (i = 0; i < n; ++i)
         for (k = 0; k < n; ++k)
             for (j = 0; j < n; ++j)

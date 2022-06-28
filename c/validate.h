@@ -19,7 +19,7 @@ int validate_dot_prod(const size_t, const int *restrict,
                       const int *restrict, const int);
 
 //  ex4-matrix-product
-int validate_mat_prod(const size_t, const int *restrict,
+int validate_mat_mult(const size_t, const int *restrict,
                       const int *restrict, const int *restrict);
 
 //  ex5-norm-mean-stddev

@@ -19,7 +19,7 @@ int validate_dot_prod(const size_t n, const int *restrict u,
     return (uv != sum) ? 0 : 1;
 }
 
-int validate_mat_prod(const size_t n, const int *restrict A,
+int validate_mat_mult(const size_t n, const int *restrict A,
                       const int *restrict B, const int *restrict C)
 {
     int *D = (int *) calloc(n * n, sizeof(int));

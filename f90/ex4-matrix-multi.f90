@@ -3,7 +3,7 @@ program main
     implicit none
 
     interface
-        subroutine mat_prod(A, B, C)
+        subroutine mat_mult(A, B, C)
             integer, dimension(:, :) :: A, B, C
         end subroutine
     end interface
@@ -34,7 +34,7 @@ program main
     end do
 
     t0 = omp_get_wtime()
-    call mat_prod(A,B,C)
+    call mat_mult(A,B,C)
     t1 = omp_get_wtime()
 
     print *, "Total time taken: ", t1-t0
@@ -44,12 +44,11 @@ program main
     deallocate(C)
 end program
 
-subroutine mat_prod(A, B, C)
+subroutine mat_mult(A, B, C)
     integer, dimension(:, :) :: A, B, C
     integer :: i, j, k, n, m
     n = size(A, 1)
     m = size(B, 2)
-    !$omp parallel do default(none) shared(n,m,A,B,C) private(i,j,k)
     do i=1,n
         do k=1,n
             do j=1,m
@@ -57,7 +56,6 @@ subroutine mat_prod(A, B, C)
             end do
         end do
     end do
-    !$omp end parallel do
 end subroutine
 
 subroutine usage(arg)
